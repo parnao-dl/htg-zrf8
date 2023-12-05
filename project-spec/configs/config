@@ -249,8 +249,8 @@ CONFIG_SUBSYSTEM_DTB_PADDING_SIZE=0x1000
 #
 # Firmware Version Configuration
 #
-CONFIG_SUBSYSTEM_HOSTNAME="petalinux-2023.1-htg-zrf8-r2-refdesign"
-CONFIG_SUBSYSTEM_PRODUCT="petalinux-2023.1-htg-zrf8-r2-refdesign"
+CONFIG_SUBSYSTEM_HOSTNAME="htg-zrf8-ref"
+CONFIG_SUBSYSTEM_PRODUCT="htg-zrf8"
 CONFIG_SUBSYSTEM_FW_VERSION="1.00"
 
 #

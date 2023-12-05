@@ -1,5 +1,5 @@
 # HTG-ZRF8-R2 Reference Design PetaLinux Project
-This PetaLinux project serves as the core of PetaLinux support for the HTG-ZRF8-R2. This project can be built as is to generate the reference design image (OSDZU3-REF), but also contains supporting scripts in order to automate BSP generation for customers. The instructions below focus on generating the reference design image, but please consult the *./doc* directory for more information on BSP generation and the assets that should be provided for customer use.
+This PetaLinux project serves as the core of PetaLinux support for the HTG-ZRF8-R2. This project can be built as is to generate the reference design image (HTG-ZRF8-REF), but also contains supporting scripts in order to automate BSP generation for customers. The instructions below focus on generating the reference design image, but please consult the *./doc* directory for more information on BSP generation and the assets that should be provided for customer use.
 
 ## Build Requirements
 * Ubuntu Desktop/Server 18.04.1 LTS, 20.04 LTS, 22.04 LTS  or other Xilinx support Linux distro.

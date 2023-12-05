@@ -1,0 +1,414 @@
+/include/ "system-conf.dtsi"
+/include/ "pl.dtsi"
+/ {
+
+	memory {
+		device_type = "memory";
+		reg = <0x0 0x0 0x0 0x7ff00000>;
+	};
+
+	/* 48MHz reference crystal */
+	ref48: ref48M {
+        	compatible = "fixed-clock";
+        	#clock-cells = <0>;
+        	clock-frequency = <48000000>;
+	};
+
+        lmk04832_oscin: oscin {
+            compatible = "fixed-clock";
+
+            #clock-cells = <0>;
+            clock-frequency = <122880000>;
+            clock-output-names = "lmk04832-oscin";
+        };
+};
+
+
+&pinctrl0 {
+	status = "okay";
+
+	pinctrl_usb0_default: usb0-default {
+		mux {
+			groups = "usb0_0_grp";
+			function = "usb0";
+		};
+
+		conf {
+			groups = "usb0_0_grp";
+			slew-rate = <1>;
+			io-standard = <1>;
+		};
+
+		conf-rx {
+			pins = "MIO52", "MIO53", "MIO55";
+			bias-high-impedance;
+		};
+
+		conf-tx {
+			pins = "MIO54", "MIO56", "MIO57", "MIO58", "MIO59",
+			       "MIO60", "MIO61", "MIO62", "MIO63";
+			bias-disable;
+		};
+	};
+
+	pinctrl_gem3_default: gem3-default {
+		mux {
+			function = "ethernet3";
+			groups = "ethernet3_0_grp";
+		};
+
+		conf {
+			groups = "ethernet3_0_grp";
+			slew-rate = <1>;
+			io-standard = <1>;
+		};
+
+		conf-rx {
+			pins = "MIO70", "MIO71", "MIO72", "MIO73", "MIO74",
+									"MIO75";
+			bias-high-impedance;
+			low-power-disable;
+		};
+
+		conf-tx {
+			pins = "MIO64", "MIO65", "MIO66", "MIO67", "MIO68",
+									"MIO69";
+			bias-disable;
+			low-power-enable;
+		};
+
+		mux-mdio {
+			function = "mdio3";
+			groups = "mdio3_0_grp";
+		};
+
+		conf-mdio {
+			groups = "mdio3_0_grp";
+			slew-rate = <1>;
+			io-standard = <1>;
+			bias-disable;
+		};
+	};
+
+	pinctrl_sdhci1_default: sdhci1-default {
+		mux {
+			groups = "sdio1_0_grp";
+			function = "sdio1";
+		};
+
+		conf {
+			groups = "sdio1_0_grp";
+			slew-rate = <1>;
+			io-standard = <1>;
+			bias-disable;
+		};
+
+		mux-cd {
+			groups = "sdio1_cd_0_grp";
+			function = "sdio1_cd";
+		};
+
+		conf-cd {
+			groups = "sdio1_cd_0_grp";
+			bias-high-impedance;
+			bias-pull-up;
+			slew-rate = <1>;
+			io-standard = <1>;
+		};
+	};
+};
+
+&gem3 {
+	status = "okay";
+	phy-handle = <&phy0>;
+	phy-mode = "rgmii-id";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_gem3_default>;
+	phy0: phy@c {
+		reg = <0xc>;
+		ti,rx-internal-delay = <0x8>;
+		ti,tx-internal-delay = <0xa>;
+		ti,fifo-depth = <0x1>;
+		ti,dp83867-rxctrl-strap-quirk;
+	};
+};
+
+/* SD1 with level shifter */
+&sdhci1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_sdhci1_default>; 
+	no-1-8-v;
+	disable-wp;
+	xlnx,mio_bank = <1>;
+};
+
+/* ULPI SMSC USB3320 */
+&usb0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_usb0_default>;
+};
+
+&dwc3_0 {
+	status = "okay";
+	dr_mode = "host";
+	snps,usb3_lpm_capable;
+	phy-names = "usb3-phy";
+	/* phys = <&lane2 4 0 3 26000000>; */
+};
+
+&i2c0 {
+	/*
+ 	 * An NXP pca9548 8 channel I2C multiplexer (U51) at address 0x71
+	 */
+        pca9548:i2c-mux@71 {
+		compatible = "nxp,pca9548";
+		reg = <0x71>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+	
+		/* PORT 4 - SI5341 Programmable clock generator (U19) at address 0x74 */
+            	i2c@4 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <4>;
+
+			isi5341: clock-generator@74 {
+				reg = <0x74>;
+				compatible = "silabs,si5341";
+				#clock-cells = <2>;
+				#address-cells = <1>;
+				#size-cells = <0>;
+				clocks = <&ref48>;
+				clock-names = "xtal";
+
+				silabs,pll-m-num = <14000>; /* PLL at 14.0 GHz */
+				silabs,pll-m-den = <48>;
+				silabs,reprogram; /* Chips are not programmed, always reset */
+
+				out@4 {
+					reg = <4>;
+					silabs,format = <1>; /* LVDS 3v3 */
+					silabs,common-mode = <3>;
+					silabs,amplitude = <3>;
+					silabs,synth-master;
+				};
+
+				/*
+		 		 * Output 6 configuration:
+				 *  LVDS 1v8
+				*/
+				out@6 {
+					reg = <6>;
+					silabs,format = <1>; /* LVDS 1v8 */
+					silabs,common-mode = <13>;
+					silabs,amplitude = <3>;
+				};
+
+				/*
+		 		 * Output 8 configuration:
+		 		 *  HCSL 3v3
+ 		 		 */
+				out@8 {
+					reg = <8>;
+					silabs,format = <2>;
+					silabs,common-mode = <11>;
+					silabs,amplitude = <3>;
+				};
+			};
+		};
+
+		/* PORT 1 - I2C I/O Expander (U75) at address 0x20 */
+            	i2c@1 {
+                	#address-cells = <1>;
+                	#size-cells = <0>;
+                	reg = <1>;
+
+                	i2c_ioexp_U75:gpio@20 {
+
+                    		compatible = "ti,tca6408";
+                    		gpio-controller;
+                    		#gpio-cells = <2>;
+                    		reg = <0x20>;
+
+				gpio-line-names = 
+				"P0_U75", "P1_U75",
+				"nc", "nc",
+				"nc", "nc",
+				"nc", "nc";
+			};
+
+            	};
+
+        	/* PORT 3 - NXP i2c-2-spi bridge (U72) at address 0x2A */
+            	i2c@3 {
+                	#address-cells = <1>;
+                	#size-cells = <0>;
+                	reg = <3>;
+
+			i2c2spi_u72:sc18is602@2A {
+	        		#address-cells = <1>;
+       				#size-cells = <0>;
+                		compatible = "nxp,sc18is602b";
+                		reg = <0x2A>;
+        		};
+		};
+
+        	/* PORT 0 - NXP i2c-2-spi bridge (U73) at address 0x2E */
+            	i2c@0 {
+                	#address-cells = <1>;
+                	#size-cells = <0>;
+                	reg = <0>;
+
+			i2c2spi_u73:sc18is602@2E {
+	        		#address-cells = <1>;
+       				#size-cells = <0>;
+                		compatible = "nxp,sc18is602b";
+                		reg = <0x2E>;
+
+				/* TI Clock Jitter Cleaner (U78) */
+       				lmk04832: clock-controller@0 {
+
+					status = "reserved";
+
+					#address-cells = <1>;
+           				#size-cells = <0>;
+           				reg = <0>;
+            				compatible = "ti,lmk04832";
+            				//spi-max-frequency = <781250>;
+            				spi-max-frequency = <1887232>;
+
+            				//reset-gpios = <&gpio_lmk 0 0 0>;
+
+            				#clock-cells = <1>;
+            				clocks = <&lmk04832_oscin>;
+            				clock-names = "oscin";
+
+					// NOTE: value of 3 for rdbk
+					// is undocumented
+					// in the device tree bindings as
+					// of this writing. We are using
+					// Status_LD1 pin for rdbk in
+					// this design.
+					//
+					// Also requires a patch to the
+					// linux driver to support this
+					// configuration.
+            				ti,spi-4wire-rdbk = <3>;
+
+            				ti,vco-hz = <2457600000>;
+
+            				assigned-clocks =
+                			<&lmk04832 0>, <&lmk04832 1>,
+                			<&lmk04832 2>, <&lmk04832 3>,
+                			<&lmk04832 4>, <&lmk04832 5>,
+                			<&lmk04832 6>, <&lmk04832 7>,
+                			<&lmk04832 8>, <&lmk04832 9>,
+                			<&lmk04832 10>, <&lmk04832 11>,
+                			<&lmk04832 12>, <&lmk04832 13>;
+
+            				assigned-clock-rates =
+                			<122880000>, <384000>,
+                			<122880000>, <384000>,
+                			<122880000>, <384000>,
+                			<153600000>, <384000>,
+                			<614400000>, <384000>,
+                			<614400000>, <384000>,
+                			<614400000>, <384000>;
+
+					/* SI5341 */
+            				clkout0@0 {
+                				reg = <0>;
+                				ti,clkout-fmt = <0x01>; // LVDS
+                				ti,clkout-sysref;
+					};
+
+					/* SI5341 */
+            				clkout1@1 {
+                				reg = <1>;
+                				ti,clkout-fmt = <0x01>; // LVDS
+                				ti,clkout-sysref;
+            				};
+
+					/* LMX2594 PLL3 */
+            				clkout2@2 {
+                				reg = <2>;
+                				ti,clkout-fmt = <0x01>; // LVDS
+                				ti,sync-mode = <0x01>;
+            				};
+
+            				clkout3@3 {
+                				reg = <3>;
+                				ti,clkout-fmt = <0x01>; // LVDS
+                				ti,clkout-sysref;
+            				};
+
+            				clkout4@4 {
+                				reg = <4>;
+                				ti,clkout-fmt = <0x01>; // LVDS
+                				ti,sync-mode = <0x01>;
+            				};
+
+            				clkout5@5 {
+                				reg = <5>;
+                				ti,clkout-fmt = <0x01>; // LVDS
+                				ti,clkout-sysref;
+            				};
+
+            				clkout6@6 {
+                				reg = <6>;
+                				ti,clkout-fmt = <0x01>; // LVDS
+                				ti,sync-mode = <0x01>;
+            				};
+
+            				clkout6@7 {
+                				reg = <7>;
+                				ti,clkout-fmt = <0x01>; // LVDS
+                				ti,sync-mode = <0x01>;
+            				};
+
+					/* USER (BANKS 84, 87 */
+            				clkout8@8 {
+                				reg = <8>;
+                				ti,clkout-fmt = <0x01>; // LVDS
+                				ti,clkout-sysref;
+            				};
+
+            				clkout9@9 {
+                				reg = <9>;
+                				ti,clkout-fmt = <0x01>; // LVDS
+                				ti,sync-mode = <0x01>;
+            				};
+
+            				clkout10@10 {
+                				reg = <10>;
+                				ti,clkout-fmt = <0x01>; // LVDS
+                				ti,sync-mode = <0x01>;
+            				};
+
+            				clkout11@11 {
+                				reg = <11>;
+                				ti,clkout-fmt = <0x01>; // LVDS
+                				ti,sync-mode = <0x01>;
+            				};
+
+            				clkout12@12 {
+                				reg = <12>;
+                				ti,clkout-fmt = <0x01>; // LVDS
+                				ti,sync-mode = <0x01>;
+            				};
+
+            				clkout13@13 {
+                				reg = <13>;
+                				ti,clkout-fmt = <0x01>; // LVDS
+                				ti,sync-mode = <0x01>;
+            				};
+        			};
+        		};
+		};
+	};
+};
+
+&i2c1 {
+};

@@ -28,5 +28,24 @@ https://docs.xilinx.com/r/en-US/ug1144-petalinux-tools-reference-guide/Introduct
     ```
 6. Insert an SD card of at least 2 GB in size into your PC.   
 7. Using your tools of choice (dd, Balena Etcher, etc.), flash the WIC image (*./images/linux/petalinux-sdimage.wic*) to the SD card.   
-8. Remove the card from the PC, and insert into the board. Ensure that the DIP switches in S1 are configured for SD boot (0101).   
-9. Power up the board with a terminal connected to the USB micro to serial converter at 115200 8N1.  
+8. Ensure that the DIP switches in S2 are configured for SD1-LS boot (1000).
+9. Ensure that a jumper is installed on JP1 between pins 1 and 2 to connect 3.3V to the SD card interface.  
+10. Remove the card from the PC, and insert into the board. 
+11. Power up the board with a terminal connected to the USB micro to serial converter at 115200 8N1.  
+
+## Using pre-built .wic boot image
+Using a pre-built .wic boot image allows the user to by-pass the above build steps.  This is
+usefull for quick testing, particularly when no changes are being made to the project that
+would necessitate a rebuild.  Note that the .wic image is compressed.
+
+1. Open a terminal in the project directory.   
+2. Decompress the .wic image in the pre-built/linux/images directory
+    ```
+     gunzip pre-built/linux/images/petalinux-sdimage.wic.gz
+    ```   
+3. Insert an SD card of at least 2 GB in size into your PC.   
+4. Using your tools of choice (dd, Balena Etcher, etc.), flash the WIC image (*pre-built/linux/images/petalinux-sdimage.wic*) to the SD card.   
+5. Remove the card from the PC, and insert into the board.
+6. Ensure that the DIP switches in S2 are configured for SD1-LS boot (1000)
+7. Ensure that a jumper is installed  on JP1 between pins 1 and 2 to connect 3.3V to the SD card interface  
+8. Power up the board with a terminal connected to the USB micro to serial converter at 115200 8N1.  

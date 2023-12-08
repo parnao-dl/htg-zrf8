@@ -237,6 +237,20 @@
 				"nc", "nc",
 				"nc", "nc",
 				"nc", "nc";
+
+				u74-s0-hog {
+					gpio-hog;
+					gpios = <0 GPIO_ACTIVE_HIGH>;
+					output-low;
+					line-name = "S0_U74";
+				};
+
+				u74-s1-hog {
+					gpio-hog;
+					gpios = <1 GPIO_ACTIVE_HIGH>;
+					output-low;
+					line-name = "S1_U74";
+				};
 			};
 
             	};

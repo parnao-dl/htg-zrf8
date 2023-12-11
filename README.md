@@ -48,4 +48,4 @@ would necessitate a rebuild.  Note that the .wic image is compressed.
 5. Remove the card from the PC, and insert into the board.
 6. Ensure that the DIP switches in S2 are configured for SD1-LS boot (1000)
 7. Ensure that a jumper is installed  on JP1 between pins 1 and 2 to connect 3.3V to the SD card interface  
-8. Power up the board with a terminal connected to the USB micro to serial converter at 115200 8N1.  
+8. Power up the board with a terminal connected to the USB micro to serial converter (J12) at 115200 8N1.  

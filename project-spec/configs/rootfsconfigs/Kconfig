@@ -9555,7 +9555,7 @@ config Init-manager-sysvinit
 endchoice
 endmenu
 
-source /home/parnao/DesignLinx/in-phasetech/petalinux-2023.1/petalinux-2023.1-htg-zrf8-r2-refdesign/project-spec/configs/rootfsconfigs/Kconfig.user
+source /home/parnao/DesignLinx/in-phasetech/petalinux-2023.1/htg-zrf8/project-spec/configs/rootfsconfigs/Kconfig.user
 
 menu "PetaLinux RootFS Settings"
 config ADD_EXTRA_USERS

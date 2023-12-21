@@ -15,4 +15,20 @@ config peekpoke
 	 bool "peekpoke"
 	 help
 	
+config rfdc  
+	 bool "rfdc"
+	 help
+	
+config rfdc-intr  
+	 bool "rfdc-intr"
+	 help
+	
+config rfdc-read-write  
+	 bool "rfdc-read-write"
+	 help
+	
+config rfdc-selftest  
+	 bool "rfdc-selftest"
+	 help
+	
 endmenu

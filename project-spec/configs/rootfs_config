@@ -4088,6 +4088,10 @@ CONFIG_board-tests=y
 CONFIG_bootscript=y
 CONFIG_gpio-demo=y
 CONFIG_peekpoke=y
+CONFIG_rfdc=y
+CONFIG_rfdc-intr=y
+CONFIG_rfdc-read-write=y
+CONFIG_rfdc-selftest=y
 
 #
 # PetaLinux RootFS Settings

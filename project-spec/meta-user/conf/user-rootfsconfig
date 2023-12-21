@@ -5,3 +5,7 @@ CONFIG_gpio-demo
 CONFIG_peekpoke
 CONFIG_board-tests
 CONFIG_bootscript
+CONFIG_rfdc
+CONFIG_rfdc-read-write
+CONFIG_rfdc-selftest
+CONFIG_rfdc-intr

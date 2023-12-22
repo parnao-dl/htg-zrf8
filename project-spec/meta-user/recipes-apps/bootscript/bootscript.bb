@@ -7,18 +7,21 @@ SECTION = "PETALINUX/apps"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
  
-SRC_URI = "file://bootscript \
+SRC_URI = " \
+	file://bootscript_v01 \
+	file://bootscript_v02 \
     "
  
 S = "${WORKDIR}"
  
 inherit update-rc.d
  
-INITSCRIPT_NAME = "bootscript"
+INITSCRIPT_NAME = "bootscript_v01"
 INITSCRIPT_PARAMS = "start 99 S ."
  
 do_install() {
         install -d ${D}${sysconfdir}/init.d
-        install -m 0755 ${S}/bootscript ${D}${sysconfdir}/init.d/bootscript
+        install -m 0755 ${S}/bootscript_v01 ${D}${sysconfdir}/init.d/bootscript_v01
+        install -m 0755 ${S}/bootscript_v02 ${D}${sysconfdir}/init.d/bootscript_v02
 }
 FILES_${PN} += "${sysconfdir}/*"

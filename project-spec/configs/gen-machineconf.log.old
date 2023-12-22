@@ -1,12 +1,5 @@
 [DEBUG] Using xsct from : /home/ken/engineering/petalinux/2023.1/tools/xsct/bin/xsct
 [DEBUG] Using conf/mconf from : /home/ken/engineering/petalinux/2023.1/components/yocto/buildtools/sysroots/x86_64-petalinux-linux/usr/bin/mconf
-[INFO] Generating Kconfig for project
-[DEBUG] Running CMD: xsct -sdx -nodisp /home/parnao/DesignLinx/in-phasetech/petalinux-2023.1/htg-zrf8/components/yocto/layers/meta-xilinx/meta-xilinx-core/gen-machine-conf/gen-machine-scripts/hw-description.tcl plnx_gen_hwsysconf /home/parnao/DesignLinx/in-phasetech/petalinux-2023.1/htg-zrf8/project-spec/hw-description/system.xsa /home/parnao/DesignLinx/in-phasetech/petalinux-2023.1/htg-zrf8/project-spec/configs/configs/Kconfig.syshw
-[DEBUG] WARNING: sdtgen package cannot be loaded. System Device tree commands will not 
- be available
-INFO: [Hsi 55-2053] elapsed time for repository (/home/ken/engineering/petalinux/2023.1/tools/xsct/data/embeddedsw) loading 0 seconds
-hsi::open_hw_design: Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 708.887 ; gain = 173.215 ; free physical = 5265 ; free virtual = 7273
-
 [INFO] Menuconfig project
 [DEBUG] Running CMD: env KCONFIG_CONFIG=/home/parnao/DesignLinx/in-phasetech/petalinux-2023.1/htg-zrf8/project-spec/configs/config mconf -s /home/parnao/DesignLinx/in-phasetech/petalinux-2023.1/htg-zrf8/project-spec/configs/configs/Kconfig
 [INFO] Silentconfig rootfs

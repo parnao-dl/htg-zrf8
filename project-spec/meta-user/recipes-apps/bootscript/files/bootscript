@@ -32,6 +32,12 @@ vSCI18IS602Addr=99
 vSCI18IS602Addr_U73=2e
 vSCI18IS602Addr_U72=2a
 
+# TCA6408 I2C I/O expander
+vTCA6408Found=0
+vTCA6408Bus=99
+vTCA6408Addr=99
+vTCA6408Addr_U75=20
+
 # LMK04832_U78 is accessed through the SCI18IS602 I2C-to-SPI bridge U73 using slave select vLMKAddr_U78
 vLMKAddr_U78=0x01
 vLMKRegs0=(0 2 3 4 5 6 12 13)
@@ -207,6 +213,30 @@ fFindSCI18IS602 () {
    done
    if [ $vSCI18IS602Found -eq 0 ]; then
       echo "Warning: SCI18IS602 device not found!"
+   fi
+}
+
+# Find TCA6408
+fFindTCA6408 () {
+   printf "Scanning for TCA6408... "
+   for (( ii=0; ii<30; ii++ )); do
+      #ls -l /dev/i2c* | grep i2c-${ii} > /dev/null
+      #if [ $? -eq 0 ]; then
+      if [ -e /dev/i2c-${ii} ]; then
+         # Check for TCA6408
+         #echo "i2c-${ii} bus:"
+         #i2cdetect -y -r ${ii} | grep -i $vTCA6408Addr > /dev/null
+	 ls /sys/bus/i2c/devices | grep -i ${ii}-00$vTCA6408Addr > /dev/null
+         if [ $? -eq 0 ]; then
+            vTCA6408Bus=${ii}
+            vTCA6408Addr="0x${vTCA6408Addr}"
+            echo "Detected TCA6408 at bus=${vTCA6408Bus}, address=${vTCA6408Addr}."
+            vTCA6408Found=1
+         fi
+      fi
+   done
+   if [ $vTCA6408Found -eq 0 ]; then
+      echo "Warning: TCA6408 device not found!"
    fi
 }
 
@@ -527,10 +557,6 @@ fCfgLMX2594 () {
 
 	if [ $vSCI18IS602Found -eq 1 ]; then
 
-	i2cset -f -y 3 0x20 0x01 0xfc i; fErrorMon $?
-
-	i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMXAddr_U81 0x00 0x00 0x00 i; fErrorMon $?
-
 	printf "Configuring LMX2594_U81\n"
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMXAddr_U81 0x70 0x00 0x00 i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMXAddr_U81 0x6F 0x00 0x00 i; fErrorMon $?
@@ -649,16 +675,22 @@ fCfgLMX2594 () {
 
 	i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMXAddr_U81 0x00 0x00 0x00 i; fErrorMon $?
 
-        printf "LMX25942_U81 Configuration\n"
-   	for (( reg=0; reg<113; reg++ )); do
-        	i2ctransfer -f -y $vSCI18IS602Bus w4@$vSCI18IS602Addr $vLMXAddr_U81 `expr ${reg} + 128` 0x00 0x00; fErrorMon $?
-        	if [ $? -eq 0 ]; then
-			printf "U81:0x%02x:" "${reg}"
-		i2ctransfer -f -y $vSCI18IS602Bus r3@$vSCI18IS602Addr | cut -b6,7,8,9,13,14; fErrorMon $?
-		fi
-	done
+   	vTCA6408Addr=${vTCA6408Addr_U75}
+	fFindTCA6408
 
-	i2cset -f -y 3 0x20 0x01 0xfd i; fErrorMon $?
+	if [ $vTCA6408Found -eq 1 ]; then
+
+		i2cset -f -y $vTCA6408Bus $vTCA6408Addr 0x01 0xfc i; fErrorMon $?
+
+	        printf "LMX25942_U81 Configuration\n"
+   		for (( reg=0; reg<113; reg++ )); do
+			i2ctransfer -f -y $vSCI18IS602Bus w4@$vSCI18IS602Addr $vLMXAddr_U81 `expr ${reg} + 128` 0x00 0x00; fErrorMon $?
+        		if [ $? -eq 0 ]; then
+				printf "U81:0x%02x:" "${reg}"
+			i2ctransfer -f -y $vSCI18IS602Bus r3@$vSCI18IS602Addr | cut -b6,7,8,9,13,14; fErrorMon $?
+			fi
+		done
+	fi
 
 	printf "Configuring LMX2594_U82\n"
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMXAddr_U82 0x70 0x00 0x00 i; fErrorMon $?
@@ -778,16 +810,22 @@ fCfgLMX2594 () {
 
 	i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMXAddr_U82 0x00 0x00 0x00 i; fErrorMon $?
 
-        printf "LMX25942_U82 Configuration\n"
-   	for (( reg=0; reg<113; reg++ )); do
-        	i2ctransfer -f -y $vSCI18IS602Bus w4@$vSCI18IS602Addr $vLMXAddr_U82 `expr ${reg} + 128` 0x00 0x00; fErrorMon $?
-        	if [ $? -eq 0 ]; then
-			printf "U82:0x%02x:" "${reg}"
-		i2ctransfer -f -y $vSCI18IS602Bus r3@$vSCI18IS602Addr | cut -b6,7,8,9,13,14; fErrorMon $?
-		fi
-	done
+   	vTCA6408Addr=${vTCA6408Addr_U75}
+	fFindTCA6408
 
-	i2cset -f -y 3 0x20 0x01 0xfe i; fErrorMon $?
+	if [ $vTCA6408Found -eq 1 ]; then
+
+		i2cset -f -y $vTCA6408Bus $vTCA6408Addr 0x01 0xfd i; fErrorMon $?
+
+	        printf "LMX25942_U82 Configuration\n"
+   		for (( reg=0; reg<113; reg++ )); do
+			i2ctransfer -f -y $vSCI18IS602Bus w4@$vSCI18IS602Addr $vLMXAddr_U82 `expr ${reg} + 128` 0x00 0x00; fErrorMon $?
+        		if [ $? -eq 0 ]; then
+				printf "U82:0x%02x:" "${reg}"
+			i2ctransfer -f -y $vSCI18IS602Bus r3@$vSCI18IS602Addr | cut -b6,7,8,9,13,14; fErrorMon $?
+			fi
+		done
+	fi
 
 	printf "Configuring LMX2594_U83\n"
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMXAddr_U83 0x70 0x00 0x00 i; fErrorMon $?
@@ -904,18 +942,27 @@ fCfgLMX2594 () {
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMXAddr_U83 0x01 0x08 0x08 i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMXAddr_U83 0x00 0x25 0x1C i; fErrorMon $?
 	printf "Configuring LMX2594_U83.... done\n"
-	fi
 
 	i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMXAddr_U83 0x00 0x00 0x00 i; fErrorMon $?
 
-        printf "LMX25942_U83 Configuration\n"
-   	for (( reg=0; reg<113; reg++ )); do
-        	i2ctransfer -f -y $vSCI18IS602Bus w4@$vSCI18IS602Addr $vLMXAddr_U83 `expr ${reg} + 128` 0x00 0x00; fErrorMon $?
-        	if [ $? -eq 0 ]; then
-			printf "U83:0x%02x:" "${reg}"
-		i2ctransfer -f -y $vSCI18IS602Bus r3@$vSCI18IS602Addr | cut -b6,7,8,9,13,14; fErrorMon $?
-		fi
-	done
+   	vTCA6408Addr=${vTCA6408Addr_U75}
+	fFindTCA6408
+
+	if [ $vTCA6408Found -eq 1 ]; then
+
+		i2cset -f -y $vTCA6408Bus $vTCA6408Addr 0x01 0xfe i; fErrorMon $?
+
+	        printf "LMX25942_U83 Configuration\n"
+   		for (( reg=0; reg<113; reg++ )); do
+			i2ctransfer -f -y $vSCI18IS602Bus w4@$vSCI18IS602Addr $vLMXAddr_U83 `expr ${reg} + 128` 0x00 0x00; fErrorMon $?
+        		if [ $? -eq 0 ]; then
+				printf "U83:0x%02x:" "${reg}"
+			i2ctransfer -f -y $vSCI18IS602Bus r3@$vSCI18IS602Addr | cut -b6,7,8,9,13,14; fErrorMon $?
+			fi
+		done
+	fi
+
+	fi
 
 }
 

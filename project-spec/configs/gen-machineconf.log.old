@@ -5,7 +5,7 @@
 [DEBUG] WARNING: sdtgen package cannot be loaded. System Device tree commands will not 
  be available
 INFO: [Hsi 55-2053] elapsed time for repository (/home/ken/engineering/petalinux/2023.1/tools/xsct/data/embeddedsw) loading 0 seconds
-hsi::open_hw_design: Time (s): cpu = 00:00:07 ; elapsed = 00:00:07 . Memory (MB): peak = 708.902 ; gain = 173.230 ; free physical = 5551 ; free virtual = 9529
+hsi::open_hw_design: Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 716.094 ; gain = 139.195 ; free physical = 2785 ; free virtual = 8145
 
 [INFO] Menuconfig project
 [DEBUG] Running CMD: env KCONFIG_CONFIG=/home/parnao/DesignLinx/in-phasetech/petalinux-2023.1/htg-zrf8/project-spec/configs/config mconf -s /home/parnao/DesignLinx/in-phasetech/petalinux-2023.1/htg-zrf8/project-spec/configs/configs/Kconfig
@@ -3561,10 +3561,10 @@ board-tests (board-tests) [Y/n/?]
 bootscript (bootscript) [Y/n/?] 
 gpio-demo (gpio-demo) [Y/n/?] 
 peekpoke (peekpoke) [Y/n/?] 
-rfdc (rfdc) [N/y/?] 
-rfdc-intr (rfdc-intr) [N/y/?] 
-rfdc-read-write (rfdc-read-write) [N/y/?] 
-rfdc-selftest (rfdc-selftest) [N/y/?] 
+rfdc (rfdc) [Y/n/?] 
+rfdc-intr (rfdc-intr) [Y/n/?] 
+rfdc-read-write (rfdc-read-write) [Y/n/?] 
+rfdc-selftest (rfdc-selftest) [Y/n/?] 
 *
 * PetaLinux RootFS Settings
 *

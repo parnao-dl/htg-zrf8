@@ -5,7 +5,7 @@
 [DEBUG] WARNING: sdtgen package cannot be loaded. System Device tree commands will not 
  be available
 INFO: [Hsi 55-2053] elapsed time for repository (/home/ken/engineering/petalinux/2023.1/tools/xsct/data/embeddedsw) loading 0 seconds
-hsi::open_hw_design: Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 644.902 ; gain = 173.230 ; free physical = 1181 ; free virtual = 6575
+hsi::open_hw_design: Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 708.883 ; gain = 173.211 ; free physical = 1527 ; free virtual = 9812
 
 [INFO] Menuconfig project
 [DEBUG] Running CMD: env KCONFIG_CONFIG=/home/parnao/DesignLinx/in-phasetech/petalinux-2023.1/htg-zrf8/project-spec/configs/config mconf -s /home/parnao/DesignLinx/in-phasetech/petalinux-2023.1/htg-zrf8/project-spec/configs/configs/Kconfig

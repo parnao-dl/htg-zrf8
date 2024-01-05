@@ -393,14 +393,14 @@ fCfgLMK04832 () {
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x00 0x06 0x50 i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x00 0x0C 0x51 i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x00 0x0D 0x04 i; fErrorMon $?
-        i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x00 0x0C i; fErrorMon $?
+        i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x00 0x18 i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x01 0x0A i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x02 0x00 i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x03 0x40 i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x04 0x10 i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x05 0x00 i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x06 0x01 i; fErrorMon $?
-        i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x07 0x01 i; fErrorMon $?
+        i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x07 0x00 i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x08 0x18 i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x09 0x0A i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x0A 0x00 i; fErrorMon $?
@@ -448,7 +448,7 @@ fCfgLMK04832 () {
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x34 0x20 i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x35 0x00 i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x36 0x01 i; fErrorMon $?
-        i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x37 0x00 i; fErrorMon $?
+        i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x37 0xC0 i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x38 0x20 i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x39 0x03 i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x3A 0x01 i; fErrorMon $?

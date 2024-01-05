@@ -400,7 +400,7 @@ fCfgLMK04832 () {
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x04 0x10 i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x05 0x00 i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x06 0x01 i; fErrorMon $?
-        i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x07 0x00 i; fErrorMon $?
+        i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x07 0x05 i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x08 0x18 i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x09 0x0A i; fErrorMon $?
         i2cset -f -y $vSCI18IS602Bus $vSCI18IS602Addr $vLMKAddr_U78 0x01 0x0A 0x00 i; fErrorMon $?
